@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Destination - EchoHive (React Enhanced)</title>
+<style>
+/* ---------- ORIGINAL + ENHANCED CSS ---------- */
+* { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background: #f9f9f9; color: #333; scroll-behavior: smooth; transition: background 0.3s, color 0.3s; }
+header { background: linear-gradient(to right, #d9e2ec, #cbd5e1); padding:15px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; position:sticky; top:0; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.1); transition: background 0.3s; }
+.logo { font-size:18px; font-weight:bold; color:#222; letter-spacing:1px; }
+nav { flex:1; display:flex; justify-content:center; }
+nav ul { list-style:none; display:flex; gap:25px; }
+nav ul li a { text-decoration:none; color:#111; font-weight:600; font-size:15px; transition:color 0.2s; }
+nav ul li a:hover { color:#0284c7; }
+.nav-right { display:flex; align-items:center; gap:12px; }
+.search-box { display:flex; align-items:center; background:white; border-radius:20px; padding:5px 12px; border:1px solid #ddd; transition: background 0.3s, border 0.3s; }
+.search-box input { border:none; outline:none; font-size:14px; background:transparent; padding:5px; width:120px; color: inherit; }
+.search-box button { border:none; background:transparent; cursor:pointer; font-size:16px; color:#555; }
+.theme-toggle { font-size:18px; cursor:pointer; color:#333; transition: color 0.3s; }
+.plus-btn { font-size:20px; font-weight:bold; padding:6px 12px; border:none; border-radius:50%; background:#06b6d4; color:white; cursor:pointer; }
+.plus-btn:hover { background:#0891b2; }
+.hero { position:relative; height:70vh; background:url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; display:flex; justify-content:center; align-items:center; color:white; text-align:center; }
+.hero::after { content:""; position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); }
+.hero-content { position:relative; z-index:2; }
+.hero-content h1 { font-size:48px; margin-bottom:10px; transition: transform 0.5s; }
+.hero-content p { font-size:18px; }
+.container { max-width:1200px; margin:60px auto; padding:0 20px; }
+.container h2 { font-size:28px; margin-bottom:10px; }
+.container p { font-size:16px; margin-bottom:30px; color:#666; }
+.blog-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px; }
+.blog-card { position:relative; background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition:transform 0.3s, box-shadow 0.3s; display:flex; flex-direction:column; }
+.blog-card:hover { transform:translateY(-5px); box-shadow:0 8px 16px rgba(0,0,0,0.2); }
+.blog-card img { width:100%; height:180px; object-fit:cover; transition: transform 0.3s; }
+.blog-card:hover img { transform:scale(1.05); }
+.blog-content { padding:15px; flex:1; display:flex; flex-direction:column; justify-content:space-between; }
+.blog-title { font-size:18px; font-weight:bold; margin-bottom:8px; color:#222; }
+.blog-meta { font-size:13px; color:#777; margin-bottom:10px; display:flex; flex-wrap:wrap; gap:10px; }
+.blog-desc { font-size:14px; color:#555; margin-bottom:15px; }
+.btn { display:inline-block; background:#06b6d4; color:white; padding:8px 16px; border-radius:6px; text-decoration:none; font-size:14px; font-weight:500; transition:background 0.2s; text-align:center; cursor:pointer; }
+.btn:hover { background:#0891b2; }
+.edit-icon { position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); color:white; padding:6px; border-radius:50%; cursor:pointer; font-size:16px; }
+.edit-options { display:none; position:absolute; top:40px; right:10px; background:white; border:1px solid #ddd; border-radius:6px; box-shadow:0 4px 6px rgba(0,0,0,0.2); }
+.edit-options button { display:block; width:100%; padding:8px 12px; border:none; background:none; cursor:pointer; text-align:left; font-size:14px; }
+.edit-options button:hover { background:#f0f0f0; }
+#blogFormContainer { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:20px; border-radius:12px; box-shadow:0 4px 8px rgba(0,0,0,0.3); z-index:1000; width:90%; max-width:400px; transition: all 0.3s; }
+#blogFormContainer h3 { margin-bottom:10px; }
+#blogFormContainer input, #blogFormContainer textarea { width:100%; margin:6px 0; padding:8px; border:1px solid #ddd; border-radius:6px; }
+#blogFormContainer button { margin:5px; padding:8px 16px; border:none; border-radius:6px; cursor:pointer; }
+#blogFormContainer button:first-of-type { background:#06b6d4; color:white; }
+#blogFormContainer button:last-of-type { background:#ddd; }
+body.dark { background:#1e293b; color:#e2e8f0; }
+body.dark header { background: linear-gradient(to right, #334155, #1e293b); }
+body.dark nav ul li a { color:#f1f5f9; }
+body.dark .search-box { background:#334155; border:1px solid #475569; }
+body.dark .search-box input { color:#f1f5f9; }
+body.dark .blog-card { background:#334155; color:#f1f5f9; }
+body.dark .blog-title { color:#f8fafc; }
+body.dark .blog-meta { color:#cbd5e1; }
+body.dark .blog-desc { color:#e2e8f0; }
+body.dark .btn { background:#0ea5e9; }
+body.dark .edit-options { background:#334155; border:1px solid #475569; }
+body.dark #blogFormContainer { background:#334155; color:#f1f5f9; }
+body.dark #blogFormContainer input, body.dark #blogFormContainer textarea { background:#1e293b; border:1px solid #475569; color:#f1f5f9; }
+.controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:18px; }
+.chip { padding:6px 10px; border-radius:999px; background:#efefef; cursor:pointer; font-size:13px; border:1px solid #ddd; }
+.chip.active { background:#06b6d4; color:white; border-color:#0891b2; }
+.card-actions { display:flex; gap:8px; align-items:center; justify-content:flex-end; margin-top:8px; flex-wrap:wrap; }
+.like-btn, .share-btn { padding:6px 10px; border-radius:8px; border:none; cursor:pointer; background:#f3f4f6; transition: background 0.3s; }
+.like-btn.active { background:#fecaca; }
+.toast { position:fixed; right:16px; bottom:16px; background:#111; color:white; padding:10px 14px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.3); z-index:2000; opacity:0.95; transition: all 0.3s; }
+.pagination { display:flex; gap:8px; align-items:center; margin-top:18px; justify-content:center; flex-wrap:wrap; }
+.page-btn { padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:white; cursor:pointer; transition: background 0.3s, color 0.3s; }
+.page-btn.active { background:#06b6d4; color:white; border-color:#0891b2; }
+@media (max-width:720px){ .hero-content h1{font-size:34px;} .blog-card img{height:160px;} nav{display:none;} .container{margin:30px auto;} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script>
+const e = React.createElement;
+const { useState, useEffect } = React;
+
+// Utility
+function shorten(text,max=120){ return text.length>max?text.slice(0,max-1)+'…':text; }
+function formatDate(d){ const dt=new Date(d); return isNaN(dt)?d:dt.toLocaleDateString(); }
+
+// App
+function App(){
+  const STORAGE_KEY = 'echohive_blogs_v2';
+  const THEME_KEY = 'echohive_theme_v2';
+  const BLOGS_PER_PAGE = 4;
+  const initialSeed = [
+    { title:"Top 10 Breathtaking Beaches", author:"Emily", date:"2025-08-15", shares:320, likes:12, desc:"From white sands to crystal-clear waters.", img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80", tags:["beach","top10"] },
+    { title:"Hidden Mountain Villages", author:"James", date:"2025-07-28", shares:275, likes:8, desc:"Step into secluded mountain villages.", img:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", tags:["mountain","culture"] },
+    { title:"City Escapes", author:"Sophia", date:"2025-06-10", shares:410, likes:30, desc:"Experience the buzz of vibrant cities.", img:"https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1200&q=80", tags:["city","urban"] },
+    { title:"Northern Lights in Iceland", author:"Liam", date:"2025-03-17", shares:420, likes:47, desc:"Witness the breathtaking Aurora Borealis.", img:"https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80", tags:["nature","aurora"] },
+    { title:"Sunset Over the Sahara", author:"Olivia", date:"2025-05-20", shares:180, likes:20, desc:"The golden sands at dusk.", img:"https://images.unsplash.com/photo-1549887534-3f7576b03ccf?auto=format&fit=crop&w=1200&q=80", tags:["desert","sunset"] },
+    { title:"Forest Trails", author:"Noah", date:"2025-04-12", shares:210, likes:15, desc:"Walk amidst the towering trees.", img:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80", tags:["forest","nature"] }
+  ];
+
+  const [blogs,setBlogs] = useState(()=>{ try{ const s=localStorage.getItem(STORAGE_KEY); return s?JSON.parse(s):initialSeed;}catch(e){return initialSeed;}});
+  const [dark,setDark] = useState(()=>{ try{ const t=localStorage.getItem(THEME_KEY); return t==='dark'; }catch(e){return false;}});
+  const [modalOpen,setModalOpen] = useState(false);
+  const [editIndex,setEditIndex] = useState(null);
+  const [formData,setFormData] = useState({title:'',author:'',desc:'',tags:'',img:'',date:''});
+  const [search,setSearch] = useState('');
+  const [filterTag,setFilterTag] = useState('');
+  const [currentPage,setCurrentPage] = useState(1);
+
+  useEffect(()=>{ document.body.className = dark?'dark':''; localStorage.setItem(THEME_KEY,dark?'dark':'light'); },[dark]);
+  useEffect(()=>{ localStorage.setItem(STORAGE_KEY,JSON.stringify(blogs)); },[blogs]);
+
+  function openModal(index){ 
+    if(index!==undefined){ setEditIndex(index); setFormData({...blogs[index], tags: blogs[index].tags.join(',')}); }
+    else { setEditIndex(null); setFormData({title:'',author:'',desc:'',tags:'',img:'',date:''}); }
+    setModalOpen(true);
+  }
+
+  function saveBlog(){
+    const data={...formData,tags:formData.tags.split(',').map(t=>t.trim())};
+    if(editIndex!==null){ const c=[...blogs]; c[editIndex]=data; setBlogs(c);}
+    else setBlogs([data,...blogs]);
+    setModalOpen(false);
+  }
+
+  function deleteBlog(index){ if(confirm("Delete this blog?")) setBlogs(blogs.filter((_,i)=>i!==index)); }
+
+  function toggleLike(index){ const c=[...blogs]; c[index].likes=c[index].likes+1; setBlogs(c); }
+
+  function shareBlog(blog){ alert(`Sharing "${blog.title}"!`); }
+
+  function filteredBlogs(){ return blogs.filter(b=>b.title.toLowerCase().includes(search.toLowerCase()) && (filterTag?b.tags.includes(filterTag):true)); }
+
+  const allTags = [...new Set(blogs.flatMap(b=>b.tags))];
+  const totalPages = Math.ceil(filteredBlogs().length / BLOGS_PER_PAGE);
+  const paginatedBlogs = filteredBlogs().slice((currentPage-1)*BLOGS_PER_PAGE,currentPage*BLOGS_PER_PAGE);
+
+  return e('div',null,
+    // Header
+    e('header',null,
+      e('div',{className:'logo'},'ECHOHIVE'),
+      e('nav',null,
+        e('ul',null,
+          e('li',null,e('a',null,'Destinations')),
+          e('li',null,e('a',null,'Food')),
+          e('li',null,e('a',null,'Culture'))
+        )
+      ),
+      e('div',{className:'nav-right'},
+        e('div',{className:'search-box'},
+          e('input',{placeholder:'Search',value:search,onChange:e=>setSearch(e.target.value)}),
+          e('button',null,'🔍')
+        ),
+        e('div',{className:'theme-toggle', onClick:()=>setDark(!dark)}, dark?'☀️':'🌙'),
+        e('button',{className:'plus-btn', onClick:()=>openModal()},'+')
+      )
+    ),
+    // Hero
+    e('div',{className:'hero'}, e('div',{className:'hero-content'}, e('h1',null,'Explore Destinations'), e('p',null,'Your adventure starts here!'))),
+    // Container
+    e('div',{className:'container'},
+      e('h2',null,'Travel Blogs'),
+      e('div',{className:'controls'},
+        allTags.map(tag=>e('div',{key:tag,className:'chip'+(filterTag===tag?' active':''),onClick:()=>setFilterTag(filterTag===tag?'':tag)},tag))
+      ),
+      e('div',{className:'blog-grid'},
+        paginatedBlogs.map((b,i)=>
+          e('div',{key:i,className:'blog-card'},
+            e('img',{src:b.img,alt:b.title}),
+            e('div',{className:'blog-content'},
+              e('div',null,
+                e('div',{className:'blog-title'},b.title),
+                e('div',{className:'blog-meta'},'By ',b.author,' | ', formatDate(b.date),' | ', b.shares,' shares'),
+                e('div',{className:'blog-desc'},shorten(b.desc))
+              ),
+              e('div',{className:'card-actions'},
+                e('button',{className:'like-btn', onClick:()=>toggleLike((currentPage-1)*BLOGS_PER_PAGE+i)},'❤️ ',b.likes),
+                e('button',{className:'share-btn', onClick:()=>shareBlog(b)},'🔗 Share'),
+                e('button',{className:'btn', onClick:()=>openModal((currentPage-1)*BLOGS_PER_PAGE+i)},'Edit'),
+                e('button',{className:'btn', onClick:()=>deleteBlog((currentPage-1)*BLOGS_PER_PAGE+i)},'Delete')
+              )
+            )
+          )
+        )
+      ),
+      // Pagination
+      e('div',{className:'pagination'},
+        Array.from({length:totalPages},(_,i)=>e('button',{key:i,className:'page-btn'+(currentPage===i+1?' active':''),onClick:()=>setCurrentPage(i+1)},i+1))
+      )
+    ),
+    // Modal
+    modalOpen && e('div',{id:'blogFormContainer', style:{display:'block'}},
+      e('h3',null,editIndex!==null?'Edit Blog':'Add Blog'),
+      e('input',{placeholder:'Title', value:formData.title, onChange:e=>setFormData({...formData,title:e.target.value})}),
+      e('input',{placeholder:'Author', value:formData.author, onChange:e=>setFormData({...formData,author:e.target.value})}),
+      e('input',{placeholder:'Date YYYY-MM-DD', value:formData.date, onChange:e=>setFormData({...formData,date:e.target.value})}),
+      e('input',{placeholder:'Image URL', value:formData.img, onChange:e=>setFormData({...formData,img:e.target.value})}),
+      e('input',{placeholder:'Tags comma-separated', value:formData.tags, onChange:e=>setFormData({...formData,tags:e.target.value})}),
+      e('textarea',{placeholder:'Description', value:formData.desc, onChange:e=>setFormData({...formData,desc:e.target.value})}),
+      e('div',null,
+        e('button',{onClick:saveBlog},'Save'),
+        e('button',{onClick:()=>setModalOpen(false)},'Cancel')
+      )
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(e(App));
+</script>
+</body>
+</html>
+
